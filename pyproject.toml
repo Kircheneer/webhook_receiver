@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "webhook_receiver"
+version = "0.1.0"
+description = "A webhook receiver implemented with the Netbox IPAM/DCIM software in mind as the target platform."
+authors = ["Leo Kirchner <leo.kirchner98@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+fastapi = "^0.61.2"
+uvicorn = "^0.12.2"
+celery = "^5.0.2"
+redis = "^3.5.3"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
