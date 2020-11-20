@@ -9,7 +9,7 @@ from typing import Any
 
 from webhook_receiver import celery, registry
 
-__all__ = ['example_create_tenant']
+__all__ = ["example_create_tenant"]
 
 logging.basicConfig()
 logger = logging.getLogger(__file__)

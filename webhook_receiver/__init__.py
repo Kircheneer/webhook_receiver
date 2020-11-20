@@ -18,12 +18,14 @@ class Settings(BaseSettings):
     digestmod: str = "sha512"
     tasks_module: str = "user_tasks"
     celery_broker: str = "redis://redis:6379"
-    celery_backend: str = None
+    celery_backend: str = ""
 
 
 app = FastAPI(title=__file__)
 settings = Settings()
-celery: Celery = Celery(__file__, broker=settings.celery_broker, backend=settings.celery_backend)
+celery: Celery = Celery(
+    __file__, broker=settings.celery_broker, backend=settings.celery_backend
+)
 registry: TaskRegistry = TaskRegistry(app)
 
 
