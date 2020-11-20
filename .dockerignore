@@ -2,3 +2,4 @@
 .idea/
 docker-compose.yml
 Dockerfile
+.mypy_cache/
