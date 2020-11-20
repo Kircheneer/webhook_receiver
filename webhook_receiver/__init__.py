@@ -1,4 +1,5 @@
 import hmac
+import importlib
 import logging
 
 from celery import Celery
@@ -12,15 +13,18 @@ logger = logging.getLogger(__file__)
 
 
 class Settings(BaseSettings):
-    secret: str
+    secret: str = ""
     encoding: str = "utf-8"
     digestmod: str = "sha512"
+    tasks_module: str = "user_tasks"
+    celery_broker: str = "redis://redis:6379"
+    celery_backend: str = None
 
 
 app = FastAPI(title=__file__)
-celery: Celery = Celery(__file__, broker="redis://redis:6379")
-registry: TaskRegistry = TaskRegistry(app)
 settings = Settings()
+celery: Celery = Celery(__file__, broker=settings.celery_broker, backend=settings.celery_backend)
+registry: TaskRegistry = TaskRegistry(app)
 
 
 def verify_hmac(
@@ -51,5 +55,5 @@ async def receive(model: str, action: str, request: Request) -> None:
     await registry.execute(request, model, action)
 
 
-# Ensure all the tasks are registered properly in both the worker and the web process
-from webhook_receiver.tasks import *  # noqa
+# Import the tasks
+importlib.import_module(settings.tasks_module)
