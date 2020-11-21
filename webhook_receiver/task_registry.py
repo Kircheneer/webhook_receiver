@@ -49,5 +49,5 @@ class TaskRegistry:
             logger.warning(
                 f"No tasks configured for model {model} and action {action}."
             )
-            return []
+            return None
         return [f.delay(await request.json()) for f in tasks_to_run]
