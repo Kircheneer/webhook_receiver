@@ -13,8 +13,7 @@ class TaskRegistry:
     Registry for tasks to be executed when model and action conditions are met.
     """
 
-    def __init__(self, app: FastAPI):
-        self.app = app
+    def __init__(self):
         self.registry: Dict[str, Dict[str, Set[Task]]] = {}
 
     def register(self, model: str, action: str) -> Callable[[Callable], Callable]:
