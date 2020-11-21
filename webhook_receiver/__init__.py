@@ -1,15 +1,11 @@
 import hmac
 import importlib
-import logging
 
 from celery import Celery
 from fastapi import FastAPI, Request, HTTPException
 from pydantic import BaseSettings
 
 from webhook_receiver.task_registry import TaskRegistry
-
-logging.basicConfig()
-logger = logging.getLogger(__file__)
 
 
 class Settings(BaseSettings):
