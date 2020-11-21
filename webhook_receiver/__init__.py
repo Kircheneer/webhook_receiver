@@ -26,7 +26,7 @@ settings = Settings()
 celery: Celery = Celery(
     __file__, broker=settings.celery_broker, backend=settings.celery_backend
 )
-registry: TaskRegistry = TaskRegistry(app)
+registry: TaskRegistry = TaskRegistry()
 
 
 def verify_hmac(
