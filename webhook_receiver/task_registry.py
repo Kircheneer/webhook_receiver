@@ -1,8 +1,8 @@
 import logging
-from typing import Callable, Any, List, Dict, Set
+from typing import Callable, Any, List, Dict, Set, Optional
 
 from celery import Task
-from fastapi import FastAPI, Request
+from fastapi import Request
 
 logging.basicConfig()
 logger = logging.getLogger(__file__)
@@ -34,13 +34,13 @@ class TaskRegistry:
 
         return decorator
 
-    async def execute(self, request: Request, model: str, action: str) -> List[Any]:
+    async def execute(self, request: Request, model: str, action: str) -> Optional[List[Any]]:
         """
         Execute tasks in the registry that are assigned to the model and the action.
         :param request: The request to pass into the task.
         :param model: The model to filter the tasks.
         :param action: The action to filters the tasks.
-        :return:
+        :return: A (possibly empty) list of task results or None if no tasks ran.
         """
 
         try:
