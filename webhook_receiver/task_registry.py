@@ -1,7 +1,7 @@
 import logging
 from typing import Callable, Any, List, Dict, Set, Optional
 
-from celery import Task
+from celery import Task  # type: ignore
 from fastapi import Request
 
 logging.basicConfig()

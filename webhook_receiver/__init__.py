@@ -1,7 +1,7 @@
 import hmac
 import importlib
 
-from celery import Celery
+from celery import Celery  # type: ignore
 from fastapi import FastAPI, Request, HTTPException
 from pydantic import BaseSettings
 
