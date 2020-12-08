@@ -18,7 +18,7 @@ logger = logging.getLogger(__file__)
 #####################################
 # Example, feel free to delete this #
 #####################################
-@registry.register(model="tenant", action="create")
+@registry.register(model="tenant", event="created")
 @celery.task
 def example_create_tenant(request: Any) -> None:
     """

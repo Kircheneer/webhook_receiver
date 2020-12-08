@@ -38,8 +38,8 @@ def verify_hmac(
     return hexdigest == computed_hexdigest
 
 
-@app.post("/{model}/{action}")
-async def receive(model: str, action: str, request: Request) -> None:
+@app.post("/netbox")
+async def receive(request: Request) -> None:
     """
     Receive a webhook from Netbox.
     :param model: The model that triggered the webhook.
@@ -50,7 +50,7 @@ async def receive(model: str, action: str, request: Request) -> None:
     hexdigest = request.headers["X-Hook-Signature"]
     if not verify_hmac(body, hexdigest):
         raise HTTPException(status_code=403, detail="Shared secret mismatch.")
-    await registry.execute(request, model, action)
+    await registry.execute(request)
 
 
 # Import the tasks
