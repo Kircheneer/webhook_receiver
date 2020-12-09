@@ -2,7 +2,7 @@
 name = "webhook_receiver"
 version = "0.1.0"
 description = "A webhook receiver implemented with the Netbox IPAM/DCIM software in mind as the target platform."
-authors = ["Leo Kirchner <leo.kirchner98@gmail.com>"]
+authors = ["Leo Kirchner <leo@kirchne.red>"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
