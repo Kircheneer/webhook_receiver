@@ -7,7 +7,7 @@ because the registry relies on its input being callable.
 import logging
 from typing import Any
 
-from webhook_receiver import celery, registry
+from webhook_receiver import registry
 
 __all__ = ["example_create_tenant"]
 
@@ -19,7 +19,6 @@ logger = logging.getLogger(__file__)
 # Example, feel free to delete this #
 #####################################
 @registry.register(model="tenant", event="created")
-@celery.task
 def example_create_tenant(request: Any) -> None:
     """
     Example that fires on /tenant/create.

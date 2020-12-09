@@ -1,7 +1,7 @@
 import logging
 from typing import Callable, Any, List, Dict, Set, Optional
 
-from celery import Task
+from celery import Task, Celery
 from fastapi import Request
 
 logging.basicConfig()
@@ -13,7 +13,11 @@ class TaskRegistry:
     Registry for tasks to be executed when model and action conditions are met.
     """
 
-    def __init__(self):
+    def __init__(self, celery: Celery):
+        """
+        :param celery: The celery instance.
+        """
+        self.celery = celery
         self.registry: Dict[str, Dict[str, Set[Task]]] = {}
 
     def register(self, model: str, event: str) -> Callable[[Callable], Callable]:
@@ -29,7 +33,10 @@ class TaskRegistry:
             self.registry[model][event] = set()
 
         def decorator(function):
-            self.registry[model][event].add(function)
+            task = self.celery.register_task(
+                self.celery.task(function)
+            )
+            self.registry[model][event].add(task)
             return function
 
         return decorator
