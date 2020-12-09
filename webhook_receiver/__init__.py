@@ -1,18 +1,23 @@
 import hmac
 import importlib
+import logging
+import pkgutil
 
 from celery import Celery
 from fastapi import FastAPI, Request, HTTPException
 from pydantic import BaseSettings
 
-from webhook_receiver.task_registry import TaskRegistry
+from webhook_receiver.task_registry import RootTaskRegistry
+
+logging.basicConfig()
+logger = logging.getLogger(__file__)
 
 
 class Settings(BaseSettings):
     secret: str = ""
     encoding: str = "utf-8"
     digestmod: str = "sha512"
-    tasks_module: str = "user_tasks"
+    plugin_prefix: str = "nbintegrate_"
     celery_broker: str = "redis://redis:6379"
     celery_backend: str = ""
 
@@ -22,7 +27,7 @@ settings = Settings()
 celery: Celery = Celery(
     __file__, broker=settings.celery_broker, backend=settings.celery_backend
 )
-registry: TaskRegistry = TaskRegistry(celery=celery)
+registry: RootTaskRegistry = RootTaskRegistry(celery=celery)
 
 
 def verify_hmac(
@@ -53,5 +58,20 @@ async def receive(request: Request) -> None:
     await registry.execute(request)
 
 
-# Import the tasks
-importlib.import_module(settings.tasks_module)
+# Discover plugins by name
+discovered_plugins = {
+    name: importlib.import_module(name)
+    for finder, name, ispkg in pkgutil.iter_modules()
+    if name.startswith(settings.plugin_prefix)
+}
+
+# Register the plugins in the root registry
+for name, plugin_module in discovered_plugins.items():
+    logger.info(f"Found plugin {name}.")
+    try:
+        registry.register_plugin(plugin_module.plugin_task_registry)
+    except AttributeError:
+        logger.error(
+            f'Plugin {name} does not have a member called "plugin_task_registry". '
+            "Not loading plugin."
+        )
