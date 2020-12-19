@@ -14,10 +14,11 @@ You need the following:
 1. Clone this repository with `git clone https://github.com/Kircheneer/webhook_receiver.git; cd webhook_receiver`
 1. Configure environment variables, most importantly the SECRET, in env/web.env
    or in any other way supported by docker-compose
-1. Configure webhooks in Netbox with the same SECRET and point them to the url of this application
-1. Add your tasks to the module user_tasks, make sure they are decorated with the correct model/action
+1. Configure a webhook in Netbox with a matching secret and point it to `/netbox`
+1. Write your tasks using a  `PluginTaskRegistry` instance called `plugin_task_registry` in a importable module
+   prefixed with `nbintegrate_` so they will be picked up by the root registry
 1. Run the receiver with `docker-compose up`
-1. Make a change in Netbox corresponding to the webhooks and tasks you configured 
+1. Make a change in Netbox corresponding to the tasks you configured and watch them be executed
 
 ## Configuration
 
