@@ -5,7 +5,7 @@ description = "A webhook receiver implemented with the Netbox IPAM/DCIM software
 authors = ["Leo Kirchner <leo@kirchne.red>"]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.8"
 fastapi = "^0.61.2"
 uvicorn = "^0.12.2"
 celery = "^5.0.2"
